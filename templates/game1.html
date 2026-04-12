@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="/static/style.css">
+<script src="/static/app.js"></script>
+</head>
+<body>
+<div class="glass card">
+<h2>Element Quiz</h2>
+
+<p>Symbol: {{element.symbol}}</p>
+
+<div>
+{% for e in elements %}
+<button onclick="checkAnswer('{{e.name}}','{{element.name}}')">
+{{e.name}}
+</button>
+{% endfor %}
+</div>
+
+<p id="result"></p>
+<p>Score: <span id="score">0</span></p>
+<p>Time: <span id="timer">30</span></p>
+</div>
+
+<script>startTimer()</script>
+</body>
+</html>
