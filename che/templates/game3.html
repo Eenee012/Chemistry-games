@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<div class="glass card">
+<h2>Music Game 🎹</h2>
+
+<button onclick="play(261)">Do</button>
+<button onclick="play(293)">Re</button>
+<button onclick="play(329)">Mi</button>
+</div>
+
+<script>
+function play(f){
+ let ctx=new AudioContext();
+ let osc=ctx.createOscillator();
+ osc.frequency.value=f;
+ osc.connect(ctx.destination);
+ osc.start();
+ setTimeout(()=>osc.stop(),300);
+}
+</script>
+
+</body>
+</html>

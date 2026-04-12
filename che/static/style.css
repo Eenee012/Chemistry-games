@@ -1,0 +1,43 @@
+body{
+margin:0;
+font-family:Arial;
+background:linear-gradient(135deg,#667eea,#764ba2);
+color:white;
+text-align:center;
+}
+
+.title{margin-top:40px;}
+
+.glass{
+background:rgba(255,255,255,0.1);
+backdrop-filter:blur(12px);
+border-radius:20px;
+padding:20px;
+box-shadow:0 8px 30px rgba(0,0,0,0.3);
+}
+
+.menu a{
+display:block;
+margin:10px;
+padding:10px;
+background:rgba(255,255,255,0.2);
+color:white;
+text-decoration:none;
+border-radius:10px;
+transition:0.3s;
+}
+
+.menu a:hover{transform:scale(1.08);}
+
+.card{
+width:300px;
+margin:80px auto;
+}
+
+button{
+margin:5px;
+padding:10px;
+border:none;
+border-radius:10px;
+cursor:pointer;
+}
