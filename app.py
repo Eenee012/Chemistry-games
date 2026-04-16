@@ -1,41 +1,44 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, jsonify, request
 import random
 
 app = Flask(__name__)
 
-elements = [
-    {"symbol": "H", "name": "Hydrogen", "number": 1},
-    {"symbol": "O", "name": "Oxygen", "number": 8},
-    {"symbol": "Na", "name": "Sodium", "number": 11},
-    {"symbol": "Cl", "name": "Chlorine", "number": 17}
-]
-
-compounds = {
-    "Water": "H2O",
-    "Carbon dioxide": "CO2",
-    "Salt": "NaCl"
+# Тоглоомын асуултуудын сан (Төрөл бүр 10 асуулттай)
+QUIZ_DATA = {
+    'element': [
+        {'q': 'Устөрөгчийн тэмдэглэгээ?', 'a': ['H', 'He', 'Li', 'Be'], 'c': 0},
+        {'q': 'Алтны латин нэршил?', 'a': ['Ag', 'Au', 'Fe', 'Cu'], 'c': 1},
+        {'q': 'Төмрийн тэмдэглэгээ?', 'a': ['I', 'Ir', 'Fe', 'F'], 'c': 2},
+        {'q': 'Хүчилтөрөгчийн атомын дугаар?', 'a': ['6', '7', '8', '16'], 'c': 2},
+        {'q': 'Нүүрстөрөгчийн тэмдэглэгээ?', 'a': ['N', 'Ca', 'C', 'Cl'], 'c': 2},
+        {'q': 'Мөнгөн усны тэмдэглэгээ?', 'a': ['Hg', 'Pb', 'Ag', 'Sn'], 'c': 0},
+        {'q': 'Азотын агаарт эзлэх хувь?', 'a': ['21%', '78%', '0.03%', '1%'], 'c': 1},
+        {'q': 'Гелийн тэмдэглэгээ?', 'a': ['H', 'Ge', 'He', 'Ga'], 'c': 2},
+        {'q': 'Натрийн тэмдэглэгээ?', 'a': ['S', 'Na', 'Ni', 'Ne'], 'c': 1},
+        {'q': 'Хамгийн хөнгөн металл?', 'a': ['Li', 'Al', 'Mg', 'Na'], 'c': 0}
+    ],
+    'compound': [
+        {'q': 'Усны томьёо?', 'a': ['H2O', 'CO2', 'HO2', 'H2O2'], 'c': 0},
+        {'q': 'Хоолны давс?', 'a': ['KCl', 'NaCl', 'HCl', 'NaOH'], 'c': 1},
+        {'q': 'Нүүрсхүчлийн хий?', 'a': ['CO', 'O2', 'CO2', 'CH4'], 'c': 2},
+        {'q': 'Хүхрийн хүчил?', 'a': ['HCl', 'HNO3', 'H2SO4', 'H3PO4'], 'c': 2},
+        {'q': 'Метан хий?', 'a': ['CH4', 'C2H6', 'CO2', 'NH3'], 'c': 0},
+        {'q': 'Аммиак?', 'a': ['NH4', 'NH3', 'N2H4', 'NO2'], 'c': 1},
+        {'q': 'Шохойн чулуу?', 'a': ['CaO', 'Ca(OH)2', 'CaCO3', 'CaCl2'], 'c': 2},
+        {'q': 'Глюкоз?', 'a': ['C6H12O6', 'C12H22O11', 'CH4O', 'C2H5OH'], 'c': 0},
+        {'q': 'Этилийн спирт?', 'a': ['CH3OH', 'C2H5OH', 'C3H7OH', 'C4H9OH'], 'c': 1},
+        {'q': 'Давсны хүчил?', 'a': ['H2SO4', 'HCl', 'HF', 'HI'], 'c': 1}
+    ]
 }
 
-@app.route("/")
-def home():
-    return render_template("index.html")
+@app.route('/')
+def index():
+    return render_template('index.html')
 
-@app.route("/game1")
-def game1():
-    return render_template("game1.html", element=random.choice(elements), elements=elements)
+@app.route('/get_quiz/<category>')
+def get_quiz(category):
+    data = QUIZ_DATA.get(category, [])
+    return jsonify(data)
 
-@app.route("/game2")
-def game2():
-    name, formula = random.choice(list(compounds.items()))
-    return render_template("game2.html", name=name, formula=formula)
-
-@app.route("/game3")
-def game3():
-    return render_template("game3.html")
-
-@app.route("/game4")
-def game4():
-    return render_template("game4.html")
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     app.run(debug=True)
