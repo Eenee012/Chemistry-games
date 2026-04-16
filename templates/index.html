@@ -1,18 +1,100 @@
 <!DOCTYPE html>
-<html>
+<html lang="mn">
 <head>
-<title>Chem Games</title>
-<link rel="stylesheet" href="/static/style.css">
-<script src="/static/app.js"></script>
+    <meta charset="UTF-8">
+    <title>Chemistry Games Pro</title>
+    <style>
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            font-family: 'Arial', sans-serif;
+            color: white;
+            text-align: center;
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            padding: 40px;
+            border-radius: 30px;
+            width: 80%;
+            max-width: 500px;
+            margin: auto;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            background: rgba(255,255,255,0.2);
+            border: 2px solid white;
+            color: white;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: 0.3s;
+        }
+        .btn:hover {
+            background: white;
+            color: #b21f1f;
+        }
+        #quiz-area { display: none; }
+    </style>
 </head>
 <body>
-<h1 class="title">🧪 Chemistry Games</h1>
+    <div class="container" id="menu">
+        <h1>🧪 Chemistry Games</h1>
+        <button class="btn" onclick="startQuiz('element')">⚛️ Element Quiz (10)</button>
+        <button class="btn" onclick="startQuiz('compound')">🧪 Compound Quiz (10)</button>
+    </div>
 
-<div class="menu glass">
-<a href="/game1">Element Quiz</a>
-<a href="/game2">Compound Quiz</a>
-<a href="/game3">Music Game</a>
-<a href="/game4">Acid/Base</a>
-</div>
+    <div class="container" id="quiz-area">
+        <h2 id="q-text"></h2>
+        <div id="options"></div>
+        <p id="stat"></p>
+    </div>
+
+    <script>
+        let currentQuestions = [];
+        let index = 0;
+        let score = 0;
+
+        async function startQuiz(cat) {
+            const res = await fetch(`/get_quiz/${cat}`);
+            currentQuestions = await res.json();
+            index = 0; score = 0;
+            document.getElementById('menu').style.display = 'none';
+            document.getElementById('quiz-area').style.display = 'block';
+            showQuestion();
+        }
+
+        function showQuestion() {
+            if(index >= 10) {
+                document.getElementById('quiz-area').innerHTML = `<h2>Дууслаа! Оноо: ${score}/10</h2><button class="btn" onclick="location.reload()">Дахин эхлэх</button>`;
+                return;
+            }
+            let q = currentQuestions[index];
+            document.getElementById('q-text').innerText = q.q;
+            let optDiv = document.getElementById('options');
+            optDiv.innerHTML = '';
+            q.a.forEach((ans, i) => {
+                let b = document.createElement('button');
+                b.className = 'btn';
+                b.innerText = ans;
+                b.onclick = () => {
+                    if(i === q.c) score++;
+                    index++;
+                    showQuestion();
+                };
+                optDiv.appendChild(b);
+            });
+            document.getElementById('stat').innerText = `Асуулт: ${index + 1}/10 | Оноо: ${score}`;
+        }
+    </script>
 </body>
 </html>
